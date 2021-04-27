@@ -1,0 +1,16 @@
+drop table if exists lecturas;
+
+create table lecturas(
+    FECHA timestamp without time zone DEFAULT ('now'::text)::timestamp(6) with time zone NOT NULL,
+    O3 varchar(30),
+    CO2 varchar(30),
+    PM10 varchar(30),
+    CO varchar(30),
+    TEMP varchar(30),
+    HUMED varchar(30)
+);
+
+
+
+insert into lecturas values(localtimestamp , 'dato1', 'dato2', 'dato3', 'dato4', 'dato5', 'dato6');
+insert into lecturas values(localtimestamp , '22234', 'r332', '4422', '4223', '533', '453');
