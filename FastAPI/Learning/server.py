@@ -3,6 +3,9 @@ from typing import Optional
 from fastapi.params import Query
 from pydantic import BaseModel
 
+import bcrypt
+from starlette.types import Message
+
 
 app = FastAPI()
 
@@ -70,3 +73,35 @@ async def validar(q: Optional[str] = Query(None, max_length=3)):
         results.update({"q": q})
     return results
 
+
+class User(BaseModel):
+    name: str
+    email: str
+    password: str
+
+async def generarKey(passwd: str):
+    passplane = passwd.encode()
+    sal = bcrypt.gensalt()
+    passcrypt = bcrypt.hashpw(passplane, sal)
+    return passcrypt
+
+
+@app.post('/login')
+async def login(user: User):
+    if user.name and user.email and user.password:
+        key = await generarKey(user.password)
+        return {"Usuario creado ": user.name, "key": key}
+    return {"message": "error al crear usuario"}
+
+
+async def comprobarKey(passwd: str, hash: str):
+    if bcrypt.checkpw(passwd, hash):
+        return {"message": "la contraseña coincide"}
+    else:
+        return {"message": "la contraseña no coincide"}
+
+@app.get('/validarcontra/{hashkey}')
+async def validarcontra(user: User, hashkey: str):
+    passwd = user.password
+    resp = await comprobarKey(passwd, hashkey)
+    return {"message": resp}
