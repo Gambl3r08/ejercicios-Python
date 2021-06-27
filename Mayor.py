@@ -1,7 +1,8 @@
-n = int(input("ingrese su edad: "))
+n = int(input("ingrese un numero: "))
+nn = int(input("ingrese otro numero: "))
 
-if n >= 18:
-    print("Felicidades, eres mayor de edad. ")
+if n < nn:
+    print(n, " es menor que: ", nn)
 
 else:
-    print("Aun no eres mayor de edad. ")
+    print(n, "es mayor que ", nn)
